@@ -17,14 +17,14 @@ namespace Rabobank.TechnicalTest.GCOB.Services
             _addressService = addressService;
             _countryService = countryService;
         }
-        public async Task AddCustomer(Customer customer)
+        public async Task<Customer> AddCustomer(Customer customer)
         {
             var validator = new CustomerValidation();
 
             var result = await validator.ValidateAsync(customer);
             if (result.IsValid)
             {
-                var id = await _repository.GenerateIdentityAsync();
+                customer.Id = await _repository.GenerateIdentityAsync();
 
                 var addressId = await _addressService.GenerateIdentityAsync();
 
@@ -33,7 +33,7 @@ namespace Rabobank.TechnicalTest.GCOB.Services
                 var names = customer.FullName.Split(' ');
                 var customerDto = new CustomerDto
                 {
-                    Id = id,
+                    Id = customer.Id,
                     FirstName = names.Length > 0 ? names[0] : string.Empty,
                     LastName = names.Length > 1 ? names[1] : string.Empty,
                     AddressId = addressId,
@@ -41,7 +41,7 @@ namespace Rabobank.TechnicalTest.GCOB.Services
 
                 await _repository.InsertAsync(customerDto);
             }
-
+            return customer;
         }
 
         public async Task<Customer> GetCustomerById(int id)

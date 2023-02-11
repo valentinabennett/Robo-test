@@ -37,13 +37,13 @@ namespace Rabobank.TechnicalTest.GCOB.Tests.Services
         [TestMethod]
         public async Task GivenHaveACustomer_AndICallAServiceToInsertTheCustomer_ThenTheCustomerIsInserted()
         {
-            var customer = new Customer();
-            MockCustomerService.Setup(x => x.AddCustomer(It.IsAny<Customer>()));           
+            var customer = new Customer { Id=5 };
+            MockCustomerService.Setup(x => x.AddCustomer(It.IsAny<Customer>())).ReturnsAsync(customer);           
            
             var result = await controller.Post(customer);
 
-            var typedResult = (NoContentResult)result;
-             Assert.AreEqual((int)HttpStatusCode.NoContent, typedResult.StatusCode);
+            var typedResult = (CreatedAtActionResult)result;
+             Assert.AreEqual((int)HttpStatusCode.Created, typedResult.StatusCode);
             MockCustomerService.Verify(c => c.AddCustomer(It.IsAny<Customer>()), Times.Once);
 
         }

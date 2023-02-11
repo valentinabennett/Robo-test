@@ -30,7 +30,8 @@ namespace Rabobank.TechnicalTest.GCOB.Controllers
             try
             {
                 var customer = await _service.GetCustomerById(customerId);
-                if (customer == null) {
+                if (customer == null)
+                {
                     _logger.LogDebug($"Unable to find customer {customerId}");
 
                     return NotFound();
@@ -46,14 +47,14 @@ namespace Rabobank.TechnicalTest.GCOB.Controllers
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> Post([FromBody] Customer customer)
         {
             _logger.LogDebug("Adding a customer");
             try
             {
-                await _service.AddCustomer(customer);
-                return NoContent();
+               var newCustomer = await _service.AddCustomer(customer);
+                return CreatedAtAction(nameof(Get), "Customer", new { customerId = newCustomer.Id }, newCustomer); ;
             }
             catch (Exception)
             {
