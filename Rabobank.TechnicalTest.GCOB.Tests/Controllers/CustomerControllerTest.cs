@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Rabobank.TechnicalTest.GCOB.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Rabobank.TechnicalTest.GCOB.Models;
 
 namespace Rabobank.TechnicalTest.GCOB.Tests.Services
 {

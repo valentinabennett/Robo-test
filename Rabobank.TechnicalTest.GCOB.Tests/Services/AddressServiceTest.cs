@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Rabobank.TechnicalTest.GCOB.Dtos;
+using Rabobank.TechnicalTest.GCOB.Models;
 using Rabobank.TechnicalTest.GCOB.Repositories;
 using Rabobank.TechnicalTest.GCOB.Services;
 using System;
@@ -53,6 +54,10 @@ namespace Rabobank.TechnicalTest.GCOB.Tests.Services
             var result = await service.GetAddressById(addressDto.Id);
             Assert.IsNotNull(result);
             Assert.AreEqual(addressDto.Id, result.Id);
+            Assert.AreEqual(addressDto.Street, result.Street);
+            Assert.AreEqual(addressDto.City, result.City);
+            Assert.AreEqual(addressDto.Postcode, result.Postcode);
+
             MockAddressRepository.Verify(x => x.GetAsync(It.IsAny<int>()), Times.Once);
         }
 
@@ -62,17 +67,25 @@ namespace Rabobank.TechnicalTest.GCOB.Tests.Services
             var addressDto = GetAddress();
             var customer = GetCustomer();
             MockAddressRepository.Setup(x => x.InsertAsync(It.IsAny<AddressDto>()));
+            MockCountryService.Setup(x => x.GetCountryByName(It.IsAny<string>())).ReturnsAsync(new Country { Id = 4, Name = "India" });
 
-             await service.InsertAddress(1, customer);
+            var address = await service.InsertAddress(1, customer);
+
+            Assert.IsNotNull(address);
+            Assert.AreEqual(address.City, customer.City);
+            Assert.AreEqual(address.Street, customer.Street);
+            Assert.AreEqual(address.Postcode, customer.Postcode);
+            Assert.AreEqual(address.CountryId, 4);
+            
 
             MockAddressRepository.Verify(x => x.InsertAsync(It.IsAny<AddressDto>()), Times.Once);
         }
 
-        private AddressDto GetAddress()
+        private static AddressDto GetAddress()
         {
             return new AddressDto { Id = 12, Street = "Street1", City = "City1", CountryId = 1, Postcode = "AAA 2AS" };
         }
-        private Customer GetCustomer()
+        private static Customer GetCustomer()
         {
             return new Customer { Id = 1, Street = "Street1", City = "City1", Postcode = "AAA 2AS" };
         }

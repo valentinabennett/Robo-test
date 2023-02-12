@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Rabobank.TechnicalTest.GCOB.Models;
 using Rabobank.TechnicalTest.GCOB.Services;
 using System;
 using System.Net;
@@ -19,6 +20,11 @@ namespace Rabobank.TechnicalTest.GCOB.Controllers
             _service = service;
         }
 
+        /// <summary>
+        /// Gets a customer by Id
+        /// </summary>
+        /// <param name="customerId">The customer Id</param>
+        /// <returns>Full details of a customer</returns>
         [HttpGet("{customerId}")]
         [ProducesResponseType(typeof(Customer), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -45,6 +51,11 @@ namespace Rabobank.TechnicalTest.GCOB.Controllers
             }
         }
 
+        /// <summary>
+        /// Create a new customer
+        /// </summary>
+        /// <param name="customer">the customer id</param>
+        /// <returns>Status created</returns>
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Created)]

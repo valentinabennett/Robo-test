@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Rabobank.TechnicalTest.GCOB.Models;
 
 namespace Rabobank.TechnicalTest.GCOB.Services
 {

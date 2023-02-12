@@ -29,12 +29,13 @@ namespace Rabobank.TechnicalTest.GCOB.Services
                 Id = addressDto.Id,
                 City = addressDto.City,
                 CountryId = addressDto.CountryId,
+                Street= addressDto.Street,
                 Postcode = addressDto.Postcode
             };
             return address;
         }
 
-        public async Task InsertAddress(int addressId, Customer customer)
+        public async Task<Address> InsertAddress(int addressId, Customer customer)
         {
             var country = await _countryService.GetCountryByName(customer.Country);
             var countryId = country != null ? country.Id : 0;
@@ -47,6 +48,20 @@ namespace Rabobank.TechnicalTest.GCOB.Services
                 CountryId = countryId
             };
             await _repository.InsertAsync(addressDto);
+
+            return Map(addressDto);
+        }
+
+        private static Address Map(AddressDto addressDto)
+        {
+            return new Address
+            {
+                Id = addressDto.Id,
+                City = addressDto.City,
+                CountryId = addressDto.CountryId,
+                Street = addressDto.Street,
+                Postcode = addressDto.Postcode
+            };
         }
     }
 }

@@ -16,7 +16,6 @@ namespace Rabobank.TechnicalTest.GCOB.Repositories
         public InMemoryCustomerRepository(ILogger<InMemoryCustomerRepository> logger)
         {
             _logger = logger;
-
         }
 
         public Task<int> GenerateIdentityAsync()

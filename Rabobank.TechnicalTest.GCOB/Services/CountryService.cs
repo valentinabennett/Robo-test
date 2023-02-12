@@ -39,7 +39,7 @@ namespace Rabobank.TechnicalTest.GCOB.Services
             }
             catch (Exception ex)
             {
-                _logger.LogDebug($"Country name {name} is not found, {ex.Message}");
+                _logger.LogDebug($"Error occured to get the country by name {name}, {ex.Message}");
                 throw;
             }
            

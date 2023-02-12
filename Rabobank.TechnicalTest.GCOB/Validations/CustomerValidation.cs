@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Rabobank.TechnicalTest.GCOB.Models;
 
 namespace Rabobank.TechnicalTest.GCOB.Validations
 {

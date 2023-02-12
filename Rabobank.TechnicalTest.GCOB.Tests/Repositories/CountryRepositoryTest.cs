@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Rabobank.TechnicalTest.GCOB.Dtos;
 using Rabobank.TechnicalTest.GCOB.Exceptions;
 using Rabobank.TechnicalTest.GCOB.Repositories;
 using System.Linq;

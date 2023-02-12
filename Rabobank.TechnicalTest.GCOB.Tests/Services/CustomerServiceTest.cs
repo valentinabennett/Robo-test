@@ -58,12 +58,22 @@ namespace Rabobank.TechnicalTest.GCOB.Tests.Services
         [TestMethod]
         public async Task GivenInsertACustomer_AndICallAServiceToGetTheCustomer_ThenTheCustomerIsInserted()
         {
+            var address = GetAddress();
             MockCustomerRepository.Setup(x => x.InsertAsync(It.IsAny<CustomerDto>()));
             MockCustomerRepository.Setup(x => x.GenerateIdentityAsync()).ReturnsAsync(1);
             MockAddressService.Setup(x => x.GenerateIdentityAsync()).ReturnsAsync(4);
+            MockAddressService.Setup(x => x.InsertAddress(It.IsAny<int>(), It.IsAny<Customer>())).ReturnsAsync(address);
 
-            var customer = new Customer { City = "Goa", Street = "Blus", Country = "India", FullName = "John Smith", Postcode="AAA 5AA" };
+            var customer = GetCustomer();
             await service.AddCustomer(customer);
+
+
+            Assert.AreEqual(customer.Id, 1);
+            Assert.AreEqual(customer.Country, "India");
+            Assert.AreEqual(customer.City, address.City);
+            Assert.AreEqual(customer.Postcode, address.Postcode);
+            Assert.AreEqual(customer.Street, address.Street);
+
 
             MockCustomerRepository.Verify(x => x.InsertAsync(It.IsAny<CustomerDto>()), Times.Once);
             MockAddressService.Verify(x => x.GenerateIdentityAsync(), Times.Once);
@@ -76,12 +86,24 @@ namespace Rabobank.TechnicalTest.GCOB.Tests.Services
             MockCustomerRepository.Setup(x => x.GenerateIdentityAsync()).ReturnsAsync(1);
             MockAddressService.Setup(x => x.GenerateIdentityAsync()).ReturnsAsync(4);
 
-            var customer = new Customer { City = "Goa",  FullName = "John Smith", Postcode = "AAA 5AA" };
+            var customer = GetCustomer();
+            customer.Street = null;
+            customer.City = null;
             await service.AddCustomer(customer);
 
             MockCustomerRepository.Verify(x => x.InsertAsync(It.IsAny<CustomerDto>()), Times.Never);
             MockAddressService.Verify(x => x.GenerateIdentityAsync(), Times.Never);
             MockCustomerRepository.Verify(x => x.GenerateIdentityAsync(), Times.Never);
+        }
+
+        private static Address GetAddress()
+        {
+            return new Address { Id = 1, City = "City", Street = "New Blus", CountryId = 4, Postcode = "AAA 5AA" };
+        }
+
+        private static Customer GetCustomer()
+        {
+            return new Customer { City = "Goa", Street = "Blus", Country = "India", FullName = "John Smith", Postcode = "AAA 5AA" };
         }
     }
 }

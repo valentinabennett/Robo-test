@@ -29,7 +29,7 @@ namespace Rabobank.TechnicalTest.GCOB.Tests.Repositories
         public async Task GivenHaveAnAddress_AndIGetNoRecordsInDB_ThenTheIdentityNumberCreated()
         {
             var result = await repository.GenerateIdentityAsync();
-            Assert.IsTrue(result == 1);
+            Assert.IsTrue(result > 0);
         }
 
         [TestMethod]

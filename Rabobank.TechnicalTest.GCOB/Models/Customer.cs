@@ -1,4 +1,4 @@
-namespace Rabobank.TechnicalTest.GCOB
+namespace Rabobank.TechnicalTest.GCOB.Models
 {
     public class Customer
     {

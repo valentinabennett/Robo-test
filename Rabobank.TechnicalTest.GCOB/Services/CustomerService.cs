@@ -1,4 +1,5 @@
 ﻿using Rabobank.TechnicalTest.GCOB.Dtos;
+using Rabobank.TechnicalTest.GCOB.Models;
 using Rabobank.TechnicalTest.GCOB.Repositories;
 using Rabobank.TechnicalTest.GCOB.Validations;
 using System.Linq;
@@ -27,8 +28,7 @@ namespace Rabobank.TechnicalTest.GCOB.Services
                 customer.Id = await _repository.GenerateIdentityAsync();
 
                 var addressId = await _addressService.GenerateIdentityAsync();
-
-                await _addressService.InsertAddress(addressId, customer);
+                var address = await _addressService.InsertAddress(addressId, customer);
 
                 var names = customer.FullName.Split(' ');
                 var customerDto = new CustomerDto
@@ -40,6 +40,8 @@ namespace Rabobank.TechnicalTest.GCOB.Services
                 };
 
                 await _repository.InsertAsync(customerDto);
+                Map(customer, address);
+
             }
             return customer;
         }
@@ -57,15 +59,23 @@ namespace Rabobank.TechnicalTest.GCOB.Services
                 {
                     Id = customerDto.Id,
                     FullName = $"{customerDto.FirstName} {customerDto.LastName}",
-                    City= address?.City,
-                    Street= address?.Street,
-                    Postcode= address?.Postcode,
+                    City = address?.City,
+                    Street = address?.Street,
+                    Postcode = address?.Postcode,
                     Country = country?.Name
                 };
 
             }
 
             return customer;
+        }
+
+        private static void Map(Customer customer, Address address)
+        {
+            customer.Street = address?.Street;
+            customer.Postcode = address?.Postcode;
+            customer.City = address?.City;
+            customer.Country =  address ==null || address.CountryId == 0 ? string.Empty : customer.Country;
         }
     }
 }

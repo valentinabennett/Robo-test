@@ -7,7 +7,7 @@ namespace Rabobank.TechnicalTest.GCOB.Services
     {
         Task<Address> GetAddressById(int addressId);
 
-        Task InsertAddress(int addressId, Customer customer);
+        Task<Address> InsertAddress(int addressId, Customer customer);
 
         Task<int> GenerateIdentityAsync();
     }

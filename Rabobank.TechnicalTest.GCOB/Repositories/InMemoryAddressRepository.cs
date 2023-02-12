@@ -16,6 +16,7 @@ namespace Rabobank.TechnicalTest.GCOB.Repositories
         {
             _logger = logger;
         }
+
         public Task<int> GenerateIdentityAsync()
         {
             _logger.LogDebug("Generating Address identity");

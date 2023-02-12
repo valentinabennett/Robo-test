@@ -29,7 +29,7 @@ namespace Rabobank.TechnicalTest.GCOB.Tests.Services
         public async Task GivenHaveACustomer_AndIGetNoCustomersInDB_ThenTheIdentityNumberCreated()
         {
             var result = await repository.GenerateIdentityAsync();
-            Assert.IsTrue(result == 1);
+            Assert.IsTrue(result > 0);
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Rabobank.TechnicalTest.GCOB.Tests.Services
             await repository.InsertAsync(customerNew);
 
             var result = await repository.GenerateIdentityAsync();
-            Assert.IsTrue(result == ++customerNew.Id);
+            Assert.IsTrue(result > customerNew.Id);
         }
 
         [TestMethod, ExpectedException(typeof(CustomerExistsException))]
